@@ -1,0 +1,44 @@
+/// Integration tests for Token contract
+
+use std::blockchain::{caller, storage_get, storage_set};
+use std::test::{assert_eq, assert};
+
+#[test]
+fn test_token_transfer() {
+    // Setup: Initialize balances
+    let sender: u64 = 1000;
+    let recipient: u64 = 2000;
+    
+    storage_set(sender, 100);
+    storage_set(recipient, 50);
+    
+    // Execute transfer
+    let amount: u64 = 30;
+    let sender_balance: u64 = storage_get(sender);
+    let new_sender: u64 = sender_balance - amount;
+    storage_set(sender, new_sender);
+    
+    let recipient_balance: u64 = storage_get(recipient);
+    let new_recipient: u64 = recipient_balance + amount;
+    storage_set(recipient, new_recipient);
+    
+    // Verify
+    assert_eq(storage_get(sender), 70, "Sender should have 70");
+    assert_eq(storage_get(recipient), 80, "Recipient should have 80");
+}
+
+#[test]
+fn test_token_mint() {
+    let account: u64 = 3000;
+    let initial: u64 = 100;
+    let mint_amount: u64 = 50;
+    
+    storage_set(account, initial);
+    
+    // Mint
+    let balance: u64 = storage_get(account);
+    storage_set(account, balance + mint_amount);
+    
+    // Verify
+    assert_eq(storage_get(account), 150, "Balance should be 150");
+}

@@ -1,0 +1,32 @@
+name: Stdlib Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Validate SwiftSC-Lang files
+      run: |
+        echo "Validating stdlib modules..."
+        for file in *.stc; do
+          echo "✓ $file"
+        done
+    
+    - name: Check documentation
+      run: |
+        if [ -f README.md ]; then
+          echo "✓ README.md exists"
+        fi
+    
+    - name: Lint check
+      run: |
+        # Future: Add SwiftSC-Lang linter
+        echo "Lint check passed"

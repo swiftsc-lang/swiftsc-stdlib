@@ -1,0 +1,43 @@
+/// Tests for std::math module
+
+use std::math::{checked_add, checked_sub, min, max, abs_diff};
+use std::test::{assert_eq, assert};
+
+#[test]
+fn test_checked_add() {
+    let result: Option<u64> = checked_add(10, 20);
+    assert_eq(result, Some(30), "10 + 20 should equal 30");
+}
+
+#[test]
+fn test_checked_sub() {
+    let result: Option<u64> = checked_sub(20, 10);
+    assert_eq(result, Some(10), "20 - 10 should equal 10");
+}
+
+#[test]
+fn test_checked_sub_underflow() {
+    let result: Option<u64> = checked_sub(5, 10);
+    assert_eq(result, None, "5 - 10 should return None");
+}
+
+#[test]
+fn test_min() {
+    let result: u64 = min(5, 10);
+    assert_eq(result, 5, "min(5, 10) should be 5");
+}
+
+#[test]
+fn test_max() {
+    let result: u64 = max(5, 10);
+    assert_eq(result, 10, "max(5, 10) should be 10");
+}
+
+#[test]
+fn test_abs_diff() {
+    let result: u64 = abs_diff(10, 3);
+    assert_eq(result, 7, "abs_diff(10, 3) should be 7");
+    
+    let result2: u64 = abs_diff(3, 10);
+    assert_eq(result2, 7, "abs_diff(3, 10) should be 7");
+}

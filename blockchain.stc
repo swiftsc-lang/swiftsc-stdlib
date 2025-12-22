@@ -1,0 +1,42 @@
+/// Blockchain-Specific Library for SwiftSC-Lang
+
+/// Get the caller's address
+fn caller() -> u64 {
+    return msg.sender;
+}
+
+/// Read from contract storage
+fn storage_get(key: u64) -> u64 {
+    return storage_read(key);
+}
+
+/// Write to contract storage
+fn storage_set(key: u64, value: u64) {
+    storage_write(key, value);
+}
+
+/// Emit an event
+fn emit(event_id: u64, data: u64) {
+    emit_event(event_id, data);
+}
+
+/// Event IDs
+const TRANSFER_EVENT: u64 = 1;
+const APPROVAL_EVENT: u64 = 2;
+const MINT_EVENT: u64 = 3;
+const BURN_EVENT: u64 = 4;
+
+/// Emit transfer event
+fn emit_transfer(from: u64, to: u64, amount: u64) {
+    emit(TRANSFER_EVENT, amount);
+}
+
+/// Emit mint event
+fn emit_mint(to: u64, amount: u64) {
+    emit(MINT_EVENT, amount);
+}
+
+/// Emit burn event
+fn emit_burn(from: u64, amount: u64) {
+    emit(BURN_EVENT, amount);
+}

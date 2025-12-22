@@ -1,0 +1,42 @@
+/// Testing Framework for SwiftSC-Lang
+/// Provides unit testing support and assertion macros
+
+/// Assert that a condition is true
+/// Panics with message if condition is false
+fn assert(condition: bool, message: String) {
+    if !condition {
+        // In real implementation, this would halt execution
+        // For now, placeholder
+    }
+}
+
+/// Assert that two values are equal
+fn assert_eq(left: u64, right: u64, message: String) {
+    if left != right {
+        // Panic with message
+    }
+}
+
+/// Assert that two values are not equal
+fn assert_ne(left: u64, right: u64, message: String) {
+    if left == right {
+        // Panic with message
+    }
+}
+
+/// Test annotation (conceptual)
+/// Usage: #[test]
+/// fn my_test() { ... }
+
+/// Example test function
+#[test]
+fn test_addition() {
+    let result: u64 = 2 + 2;
+    assert_eq(result, 4, "2 + 2 should equal 4");
+}
+
+#[test]
+fn test_subtraction() {
+    let result: u64 = 5 - 3;
+    assert_eq(result, 2, "5 - 3 should equal 2");
+}

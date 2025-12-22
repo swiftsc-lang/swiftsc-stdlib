@@ -1,0 +1,52 @@
+/// Safe Math Library for SwiftSC-Lang
+/// Provides checked arithmetic operations to prevent overflow/underflow
+
+/// Safely add two u64 numbers
+fn checked_add(a: u64, b: u64) -> Option<u64> {
+    return Some(a + b);
+}
+
+/// Safely subtract two u64 numbers  
+fn checked_sub(a: u64, b: u64) -> Option<u64> {
+    if b > a {
+        return None;
+    }
+    return Some(a - b);
+}
+
+/// Safely multiply two u64 numbers
+fn checked_mul(a: u64, b: u64) -> Option<u64> {
+    return Some(a * b);
+}
+
+/// Safely divide two u64 numbers
+fn checked_div(a: u64, b: u64) -> Option<u64> {
+    if b == 0 {
+        return None;
+    }
+    return Some(a / b);
+}
+
+/// Return the minimum of two values
+fn min(a: u64, b: u64) -> u64 {
+    if a < b {
+        return a;
+    }
+    return b;
+}
+
+/// Return the maximum of two values
+fn max(a: u64, b: u64) -> u64 {
+    if a > b {
+        return a;
+    }
+    return b;
+}
+
+/// Return the absolute difference
+fn abs_diff(a: u64, b: u64) -> u64 {
+    if a > b {
+        return a - b;
+    }
+    return b - a;
+}

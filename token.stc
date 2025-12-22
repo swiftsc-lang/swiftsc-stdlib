@@ -1,0 +1,55 @@
+/// ERC-20 Token Standard Implementation
+/// Example token contract using SwiftSC-Lang stdlib
+
+use std::math::{checked_add, checked_sub};
+use std::blockchain::{caller, storage_get, storage_set, emit_transfer, emit_mint};
+
+contract Token {
+    /// Total supply storage key
+    const TOTAL_SUPPLY_KEY: u64 = 0;
+    
+    /// Get balance of an address
+    fn balance_of(account: u64) -> u64 {
+        return storage_get(account);
+    }
+    
+    /// Get total supply
+    fn total_supply() -> u64 {
+        return storage_get(TOTAL_SUPPLY_KEY);
+    }
+    
+    /// Transfer tokens
+    fn transfer(to: u64, amount: u64) -> Result {
+        let sender: u64 = caller();
+        let sender_balance: u64 = storage_get(sender);
+        
+        let new_balance: Option<u64> = checked_sub(sender_balance, amount);
+        if new_balance == None {
+            return Err("Insufficient balance");
+        }
+        
+        let recipient_balance: u64 = storage_get(to);
+        let new_recipient: Option<u64> = checked_add(recipient_balance, amount);
+        
+        storage_set(sender, new_balance);
+        storage_set(to, new_recipient);
+        
+        emit_transfer(sender, to, amount);
+        
+        return Ok("Transfer successful");
+    }
+    
+    /// Mint new tokens
+    fn mint(to: u64, amount: u64) {
+        let balance: u64 = storage_get(to);
+        let supply: u64 = storage_get(TOTAL_SUPPLY_KEY);
+        
+        let new_balance: Option<u64> = checked_add(balance, amount);
+        let new_supply: Option<u64> = checked_add(supply, amount);
+        
+        storage_set(to, new_balance);
+        storage_set(TOTAL_SUPPLY_KEY, new_supply);
+        
+        emit_mint(to, amount);
+    }
+}
