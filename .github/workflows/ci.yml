@@ -8,25 +8,31 @@ on:
 
 jobs:
   validate:
+    name: Validate Stdlib
     runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v3
     
-    - name: Validate SwiftSC-Lang files
+    - name: Audit Files
       run: |
-        echo "Validating stdlib modules..."
-        for file in *.stc; do
-          echo "✓ $file"
+        echo "Checking for essential stdlib modules..."
+        FILES=("blockchain.stc" "collections.stc" "math.stc" "token.stc")
+        for file in "${FILES[@]}"; do
+          if [ -f "$file" ]; then
+            echo "✓ $file found"
+          else
+            echo "✗ $file missing"
+            exit 1
+          fi
         done
-    
-    - name: Check documentation
+        
+    - name: Version Check
       run: |
-        if [ -f README.md ]; then
-          echo "✓ README.md exists"
+        if [ -f VERSION ]; then
+          VERSION=$(cat VERSION)
+          echo "Stdlib Version: $VERSION"
+        else
+          echo "✗ VERSION file missing"
+          exit 1
         fi
-    
-    - name: Lint check
-      run: |
-        # Future: Add SwiftSC-Lang linter
-        echo "Lint check passed"

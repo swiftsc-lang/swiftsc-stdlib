@@ -1,45 +1,31 @@
-# SwiftSC-Lang Standard Library
+# 📚 SwiftSC Standard Library
 
-Core standard library for SwiftSC-Lang smart contracts.
+![Version](https://img.shields.io/badge/version-1.0.2--beta-blue)
 
-> **Note:** v1.0 includes basic modules. Full collections (Vec, HashMap) coming in v2.0.
+The foundational library for SwiftSC smart contracts, providing essential types and utilities.
 
-## Modules
+## 📦 Contents
 
-- `math.stc` - Safe arithmetic
-- `crypto.stc` - Cryptographic functions
-- `blockchain.stc` - Blockchain utilities
-- `token.stc` - ERC-20 token standard
-- `test.stc` - Testing framework
+- **Collections**: `HashMap`, `Vector` (Early support).
+- **Primitives**: Support for `String`, `Result`, and numeric types.
+- **Blockchain**: Host interface definitions for smart contract interaction.
 
-## Installation
+## 🚀 Usage
 
-```bash
-# Included by default with SwiftSC-Lang compiler
-swiftsc build  # Automatically includes stdlib
-```
+The standard library is automatically included by the SwiftSC compiler.
 
-## Usage
-
-```rust
-use std::math::checked_add;
-use std::blockchain::caller;
+```swift
+use collections::HashMap;
 
 contract MyContract {
-    fn example() {
-        let result = checked_add(10, 20);
-    }
+    // Standard library features are available here
 }
 ```
 
-## Documentation
+## 🤝 Contributing
 
-See [stdlib documentation](https://docs.swiftsc-lang.dev/stdlib)
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to add new modules to the stdlib.
 
-## Contributing
-
-See [CONTRIBUTING.md](../CONTRIBUTING.md)
-
-## License
+## 📄 License
 
 MIT

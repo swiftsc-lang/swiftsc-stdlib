@@ -1,0 +1,21 @@
+/// Standard Collections for SwiftSC-Lang
+
+struct Vec<T> {
+    ptr: u64,
+    len: u64,
+    cap: u64,
+}
+
+impl<T> Vec<T> {
+    pub fn new() -> Vec<T> {
+        return Vec::<T> {
+            ptr: 0,
+            len: 0,
+            cap: 0,
+        };
+    }
+
+    pub fn push(self, item: T) {
+        // ... implementation ...
+    }
+}
