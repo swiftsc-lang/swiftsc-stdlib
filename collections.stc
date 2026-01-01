@@ -1,5 +1,6 @@
 /// Standard Collections for SwiftSC-Lang
 
+/// A growable array of items of type T
 struct Vec<T> {
     ptr: u64,
     len: u64,
@@ -15,7 +16,20 @@ impl<T> Vec<T> {
         };
     }
 
-    pub fn push(self, item: T) {
-        // ... implementation ...
+    pub fn length(self) -> u64 {
+        return self.len;
+    }
+}
+
+/// A key-value store mapping keys of type K to values of type V
+struct Map<K, V> {
+    id: u64,
+}
+
+impl<K, V> Map<K, V> {
+    pub fn new() -> Map<K, V> {
+        return Map::<K, V> {
+            id: 0, // Placeholder mapping to storage ID
+        };
     }
 }

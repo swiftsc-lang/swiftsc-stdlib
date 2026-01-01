@@ -3,6 +3,9 @@
 
 /// Safely add two u64 numbers
 fn checked_add(a: u64, b: u64) -> Option<u64> {
+    if a > (0xFFFFFFFFFFFFFFFF - b) {
+        return None;
+    }
     return Some(a + b);
 }
 
@@ -16,6 +19,12 @@ fn checked_sub(a: u64, b: u64) -> Option<u64> {
 
 /// Safely multiply two u64 numbers
 fn checked_mul(a: u64, b: u64) -> Option<u64> {
+    if a == 0 || b == 0 {
+        return Some(0);
+    }
+    if a > (0xFFFFFFFFFFFFFFFF / b) {
+        return None;
+    }
     return Some(a * b);
 }
 
