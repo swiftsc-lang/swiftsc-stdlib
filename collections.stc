@@ -1,5 +1,11 @@
 /// Standard Collections for SwiftSC-Lang
 
+/// A simple Option type for safe returns
+enum Option<T> {
+    Some(T),
+    None,
+}
+
 /// A growable array of items of type T
 struct Vec<T> {
     ptr: u64,
@@ -19,17 +25,120 @@ impl<T> Vec<T> {
     pub fn length(self) -> u64 {
         return self.len;
     }
+
+    pub fn push(mut self, value: T) -> Vec<T> {
+        if self.len == self.cap {
+            let new_cap = if self.cap == 0 { 4 } else { self.cap * 2 };
+            let new_ptr = mem_alloc(new_cap * sizeof::<T>());
+            
+            if self.ptr != 0 {
+                let mut i = 0;
+                while i < self.len {
+                    let val = ptr_read::<T>(self.ptr + i * sizeof::<T>());
+                    ptr_write::<T>(new_ptr + i * sizeof::<T>(), val);
+                    i = i + 1;
+                }
+                // mem_free(self.ptr);
+            }
+            self.ptr = new_ptr;
+            self.cap = new_cap;
+        }
+        
+        ptr_write::<T>(self.ptr + self.len * sizeof::<T>(), value);
+        self.len = self.len + 1;
+        return self;
+    }
+
+    pub fn get(self, index: u64) -> Option<T> {
+        if index >= self.len {
+            return Option::None;
+        }
+        let val = ptr_read::<T>(self.ptr + index * sizeof::<T>());
+        return Option::Some(val);
+    }
+
+    pub fn pop(mut self) -> Option<T> {
+        if self.len == 0 {
+            return Option::None;
+        }
+        self.len = self.len - 1;
+        let val = ptr_read::<T>(self.ptr + self.len * sizeof::<T>());
+        return Option::Some(val);
+    }
+
+    pub fn remove(mut self, index: u64) -> Vec<T> {
+        if index >= self.len {
+            return self;
+        }
+        let mut i = index;
+        while i < self.len - 1 {
+            let next_val = ptr_read::<T>(self.ptr + (i + 1) * sizeof::<T>());
+            ptr_write::<T>(self.ptr + i * sizeof::<T>(), next_val);
+            i = i + 1;
+        }
+        self.len = self.len - 1;
+        return self;
+    }
 }
 
-/// A key-value store mapping keys of type K to values of type V
-struct Map<K, V> {
+/// A key-value store mapping keys to values in persistent storage
+struct Map<V> {
     id: u64,
 }
 
-impl<K, V> Map<K, V> {
-    pub fn new() -> Map<K, V> {
-        return Map::<K, V> {
-            id: 0, // Placeholder mapping to storage ID
+impl<V> Map<V> {
+    pub fn new(id: u64) -> Map<V> {
+        return Map::<V> {
+            id: id,
         };
+    }
+
+    pub fn insert(self, key: u64, value: V) {
+        let storage_key = hash_i64(self.id, key);
+        storage_write(storage_key, value);
+    }
+
+    pub fn get(self, key: u64) -> Option<V> {
+        let storage_key = hash_i64(self.id, key);
+        let val = storage_read(storage_key);
+        // Note: This assumes 0 means empty, which is a common limitation in simple storage models
+        if val == 0 {
+            return Option::None;
+        }
+        return Option::Some(val);
+    }
+
+    pub fn remove(self, key: u64) {
+        let storage_key = hash_i64(self.id, key);
+        storage_write(storage_key, 0);
+    }
+}
+
+/// A collection of unique u64 values
+struct HashSet {
+    inner: Map<u64>,
+}
+
+impl HashSet {
+    pub fn new(id: u64) -> HashSet {
+        return HashSet {
+            inner: Map::<u64>::new(id),
+        };
+    }
+
+    pub fn insert(self, value: u64) {
+        self.inner.insert(value, 1);
+    }
+
+    pub fn contains(self, value: u64) -> bool {
+        let res = self.inner.get(value);
+        match res {
+            Option::Some(v) => return v == 1,
+            Option::None => return false,
+        }
+    }
+
+    pub fn remove(self, value: u64) {
+        self.inner.remove(value);
     }
 }

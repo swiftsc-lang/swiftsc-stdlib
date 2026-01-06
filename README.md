@@ -1,6 +1,6 @@
 # 📚 SwiftSC Standard Library
 
-![Version](https://img.shields.io/badge/version-1.0.3--beta-blue)
+![Version](https://img.shields.io/badge/version-1.0.3-blue)
 
 The foundational library for SwiftSC smart contracts, providing essential types and utilities.
 
